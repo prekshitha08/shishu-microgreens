@@ -1,0 +1,15 @@
+<svg width="420" height="420" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="420" height="420" fill="white"/>
+  <path d="M103 211C103 126 164 59 246 44C197 52 149 78 118 120C83 168 79 234 106 288C127 330 165 361 212 373C145 353 103 290 103 211Z" fill="#7BC943"/>
+  <path d="M146 247C143 194 165 143 207 111C198 142 190 175 194 209C198 244 213 278 240 305C210 295 184 278 166 253C158 259 151 253 146 247Z" fill="#8FD344"/>
+  <path d="M176 246C177 200 199 157 236 128C233 153 231 179 235 204C240 232 252 257 272 279C247 269 224 255 206 236C197 246 188 253 176 246Z" fill="white"/>
+  <path d="M309 260C331 231 344 196 344 159C344 134 338 110 327 89C352 120 367 160 367 204C367 269 334 327 280 361C248 381 211 389 176 384C225 379 274 342 309 260Z" fill="#0E6A12"/>
+  <path d="M273 276C267 235 278 195 303 162C307 185 309 208 304 231C299 257 288 280 271 300C260 293 256 285 273 276Z" fill="white"/>
+  <path d="M84 334H336" stroke="transparent"/>
+  <text x="210" y="337" text-anchor="middle" fill="#1C6B16" font-size="42" font-weight="700" font-family="Georgia, serif" letter-spacing="2">
+    SHISHU MICROGREENS
+  </text>
+  <text x="210" y="370" text-anchor="middle" fill="#2A7A1F" font-size="16" font-weight="700" font-family="Arial, sans-serif" letter-spacing="3">
+    POWER IN EVERY LEAF
+  </text>
+</svg>
