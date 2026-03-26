@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductGrid } from "@/components/product-grid";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
 import { seedProducts } from "@/lib/data";
-import { getProductBySlug, getRelatedProducts } from "@/lib/store";
+import type { ProductRecord } from "@/lib/types";
 
 type Props = {
   params: { slug: string };
@@ -17,15 +17,25 @@ export function generateStaticParams() {
   }));
 }
 
+function getStaticProductBySlug(slug: string) {
+  return seedProducts.find((product) => product.slug === slug) ?? null;
+}
+
+function getStaticRelatedProducts(slug: string, category: string): ProductRecord[] {
+  return seedProducts
+    .filter((product) => product.slug !== slug && product.category === category)
+    .slice(0, 3);
+}
+
 export default async function ProductPage({ params }: Props) {
   const { slug } = params;
-  const product = await getProductBySlug(slug);
+  const product = getStaticProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
-  const relatedProducts = await getRelatedProducts(product.slug, product.category);
+  const relatedProducts = getStaticRelatedProducts(product.slug, product.category);
 
   return (
     <>
