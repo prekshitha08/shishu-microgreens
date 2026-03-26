@@ -4,18 +4,20 @@ import { Order } from "@/models/order";
 import { Product } from "@/models/product";
 import type { ProductRecord } from "@/lib/types";
 
-function normalizeProduct(product: ProductRecord & { _id?: unknown }): ProductRecord {
+type ProductLike = Partial<ProductRecord> & { _id?: unknown };
+
+function normalizeProduct(product: ProductLike): ProductRecord {
   return {
-    name: product.name,
-    slug: product.slug,
-    category: product.category,
-    description: product.description,
-    benefits: product.benefits,
-    price: product.price,
-    weight: product.weight,
-    image: product.image,
-    inventory: product.inventory,
-    featured: product.featured
+    name: product.name ?? "",
+    slug: product.slug ?? "",
+    category: product.category ?? "",
+    description: product.description ?? "",
+    benefits: product.benefits ?? [],
+    price: product.price ?? 0,
+    weight: product.weight ?? "",
+    image: product.image ?? "",
+    inventory: product.inventory ?? 0,
+    featured: product.featured ?? false
   };
 }
 
@@ -26,7 +28,7 @@ export async function getAllProducts() {
   }
 
   const products = await Product.find().sort({ createdAt: -1 }).lean();
-  return products.map((product) => normalizeProduct(product as ProductRecord));
+  return products.map((product) => normalizeProduct(product as ProductLike));
 }
 
 export async function getFeaturedProducts() {
@@ -41,7 +43,7 @@ export async function getProductBySlug(slug: string) {
   }
 
   const product = await Product.findOne({ slug }).lean();
-  return product ? normalizeProduct(product as ProductRecord) : null;
+  return product ? normalizeProduct(product as ProductLike) : null;
 }
 
 export async function getRelatedProducts(slug: string, category: string) {
@@ -76,7 +78,7 @@ export async function getAdminDashboardData() {
     productCount,
     lowStockCount,
     pendingOrders,
-    products: products.map((product) => normalizeProduct(product as ProductRecord)),
+    products: products.map((product) => normalizeProduct(product as ProductLike)),
     orders
   };
 }
