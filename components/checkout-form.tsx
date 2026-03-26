@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart-context";
-import { RazorpayCheckoutButton } from "@/components/razorpay-checkout-button";
 
 type OrderState = "idle" | "submitting" | "success" | "error";
 
@@ -32,8 +31,45 @@ export function CheckoutForm() {
     price: item.price
   }));
 
-  const canPay =
+  const canPlaceOrder =
     customerName.trim() && email.trim() && phone.trim() && address.trim() && items.length > 0;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus("submitting");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          customerName,
+          email,
+          phone,
+          address,
+          items: lineItems,
+          total
+        })
+      });
+
+      const payload = (await response.json()) as { message?: string };
+      if (!response.ok) {
+        throw new Error(payload.message || "Unable to place order.");
+      }
+
+      clearCart();
+      setStatus("success");
+      router.push("/checkout/success");
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage(
+        error instanceof Error ? error.message : "Something went wrong while placing the order."
+      );
+    }
+  };
 
   if (items.length === 0) {
     return <div className="empty-card">Your cart is empty. Add items before checkout.</div>;
@@ -41,12 +77,7 @@ export function CheckoutForm() {
 
   return (
     <div className="checkout-layout">
-      <form
-        className="panel checkout-form"
-        onSubmit={(event) => {
-          event.preventDefault();
-        }}
-      >
+      <form className="panel checkout-form" onSubmit={handleSubmit}>
         <h2>Customer details</h2>
         <label className="form-field">
           <span>Full name</span>
@@ -70,27 +101,20 @@ export function CheckoutForm() {
           <textarea value={address} onChange={(event) => setAddress(event.target.value)} rows={4} required />
         </label>
         <div className="panel panel-muted">
-          <h3>Payment</h3>
+          <h3>Order placement</h3>
           <p className="page-copy">
-            This checkout uses Razorpay Standard Checkout. A Razorpay order is created on the server
-            before payment, then the payment signature is verified and the order is saved.
+            This checkout places the order directly and saves it in MongoDB for admin review.
+            You can confirm payment manually, take cash on delivery, or follow up on WhatsApp.
           </p>
         </div>
         {status === "error" ? <p className="error-text">{errorMessage}</p> : null}
-        <RazorpayCheckoutButton
-          customerName={customerName}
-          email={email}
-          phone={phone}
-          address={address}
-          items={lineItems}
-          total={total}
-          disabled={!canPay || status === "submitting"}
-          onSuccess={() => {
-            clearCart();
-            setStatus("success");
-            router.push("/checkout/success");
-          }}
-        />
+        <button
+          type="submit"
+          className="button button-primary"
+          disabled={!canPlaceOrder || status === "submitting"}
+        >
+          {status === "submitting" ? "Placing order..." : "Place order"}
+        </button>
       </form>
 
       <aside className="panel">

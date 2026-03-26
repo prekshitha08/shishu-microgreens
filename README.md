@@ -37,11 +37,9 @@ Copy-Item .env.example .env.local
 
 3. Update `MONGODB_URI` in `.env.local`.
 
-4. Add Razorpay keys if you want live checkout:
+4. Add admin credentials:
 
 ```env
-RAZORPAY_KEY_ID=rzp_test_your_key_id
-RAZORPAY_KEY_SECRET=your_key_secret
 ADMIN_EMAIL=admin@shishumicrogreens.com
 ADMIN_PASSWORD=admin123
 ADMIN_SESSION_SECRET=change_this_secret
@@ -75,6 +73,6 @@ Expected filenames:
 ## Notes
 
 - If `MONGODB_URI` is not set, the app still renders using local seed data for browsing.
-- Razorpay checkout follows the official flow: create an order on the server, open Checkout on the client, and verify the payment signature on the server.
+- Checkout places orders directly and stores them for admin follow-up.
 - Admin routes and admin APIs are protected by a simple login session.
 - The next step would be adding authentication, checkout, and admin CRUD forms.
