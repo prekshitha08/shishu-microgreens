@@ -3,6 +3,8 @@ import { ProductGrid } from "@/components/product-grid";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { getFeaturedProducts } from "@/lib/store";
 
+export const revalidate = 3600;
+
 export default async function HomePage() {
   const products = await getFeaturedProducts();
 

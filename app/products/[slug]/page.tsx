@@ -2,11 +2,20 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ProductGrid } from "@/components/product-grid";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
+import { seedProducts } from "@/lib/data";
 import { getProductBySlug, getRelatedProducts } from "@/lib/store";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+export const revalidate = 3600;
+
+export function generateStaticParams() {
+  return seedProducts.map((product) => ({
+    slug: product.slug
+  }));
+}
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;

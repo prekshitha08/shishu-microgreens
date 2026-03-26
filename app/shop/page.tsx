@@ -5,6 +5,8 @@ export const metadata = {
   title: "Shop | Shishu Microgreens"
 };
 
+export const revalidate = 3600;
+
 export default async function ShopPage() {
   const products = await getAllProducts();
 
