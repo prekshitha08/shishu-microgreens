@@ -33,7 +33,13 @@ export async function connectToDatabase() {
     });
   }
 
-  cache.conn = await cache.promise;
-  global.mongooseCache = cache;
-  return cache.conn;
+  try {
+    cache.conn = await cache.promise;
+    global.mongooseCache = cache;
+    return cache.conn;
+  } catch (error) {
+    cache.promise = null;
+    console.warn("MongoDB connection failed. Falling back to seed data.", error);
+    return null;
+  }
 }
