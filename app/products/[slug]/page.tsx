@@ -6,7 +6,7 @@ import { seedProducts } from "@/lib/data";
 import { getProductBySlug, getRelatedProducts } from "@/lib/store";
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 };
 
 export const revalidate = 3600;
@@ -18,7 +18,7 @@ export function generateStaticParams() {
 }
 
 export default async function ProductPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug } = params;
   const product = await getProductBySlug(slug);
 
   if (!product) {
